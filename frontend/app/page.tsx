@@ -11,7 +11,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const response = await axios.get<Incident[]>('http://localhost:5000/api/incidents');
+        const response = await axios.get<Incident[]>('http://localhost:10000/api/incidents');
         setIncidents(response.data);
       } catch (error) {
         console.error('Error fetching incidents:', error);

@@ -18,7 +18,7 @@ const IncidentDetailPage = () => {
     if (id) {
       const fetchIncident = async () => {
         try {
-          const response = await axios.get<Incident>(`http://localhost:5000/api/incidents/${id}`);
+          const response = await axios.get<Incident>(`http://localhost:10000/api/incidents/${id}`);
           setIncident(response.data);
         } catch (error) {
           console.error('Error fetching incident data:', error);

@@ -25,7 +25,7 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', data, { withCredentials: true });
+      const response = await axios.post('http://localhost:10000/api/login', data, { withCredentials: true });
       const { token } = response.data;
 
       // Store the token in localStorage

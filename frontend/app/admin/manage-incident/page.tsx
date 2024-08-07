@@ -16,7 +16,7 @@ const ManageIncidentPage = () => {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/incidents");
+        const response = await axios.get("http://localhost:10000/api/incidents");
 
         console.log(response.data); // Log the response data
 

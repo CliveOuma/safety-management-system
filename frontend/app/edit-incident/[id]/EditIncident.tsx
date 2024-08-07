@@ -24,7 +24,7 @@ interface EditIncidentProps {
   onClose: () => void;
 }
 
-const EditIncident = ({ incident, onIncidentUpdated, onClose }: EditIncidentProps) => {
+const EditIncident = ({ incident, onIncidentUpdated }: EditIncidentProps) => {
   const { register, handleSubmit, formState: { errors } } = useForm<IncidentFormFields>({
     defaultValues: {
       date: incident.date,
@@ -47,7 +47,7 @@ const EditIncident = ({ incident, onIncidentUpdated, onClose }: EditIncidentProp
         throw new Error("No authentication token found");
       }
 
-      const response = await axios.put(`http://localhost:5000/api/incidents/${incident._id}`, data, {
+      const response = await axios.put(`http://localhost:10000/api/incidents/${incident._id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
