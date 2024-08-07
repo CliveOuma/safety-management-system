@@ -24,7 +24,7 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
         throw new Error("No authentication token found");
       }
 
-      await axios.delete(`http://localhost:10000/api/incidents/${id}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/incidents/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

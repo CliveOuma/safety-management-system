@@ -9,7 +9,7 @@ import AdminNav from '@/app/components/admin/AdminNav';
 import Container from '@/app/components/Container';
 
 const IncidentDetailPage = () => {
-  const { id } = useParams(); // Use useParams instead of router.query
+  const { id } = useParams(); 
   const [incident, setIncident] = useState<Incident | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +18,7 @@ const IncidentDetailPage = () => {
     if (id) {
       const fetchIncident = async () => {
         try {
-          const response = await axios.get<Incident>(`http://localhost:10000/api/incidents/${id}`);
+          const response = await axios.get<Incident>(`${process.env.NEXT_PUBLIC_API_URL}/api/incidents/${id}`);
           setIncident(response.data);
         } catch (error) {
           console.error('Error fetching incident data:', error);

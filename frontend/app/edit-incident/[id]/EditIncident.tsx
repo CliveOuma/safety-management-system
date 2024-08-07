@@ -47,7 +47,7 @@ const EditIncident = ({ incident, onIncidentUpdated }: EditIncidentProps) => {
         throw new Error("No authentication token found");
       }
 
-      const response = await axios.put(`http://localhost:10000/api/incidents/${incident._id}`, data, {
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/incidents/${incident._id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

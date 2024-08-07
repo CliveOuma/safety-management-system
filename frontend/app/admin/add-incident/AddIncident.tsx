@@ -32,7 +32,7 @@ const AddIncident: React.FC<AddIncidentProps> = ({ onIncidentAdded }) => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:10000/api/incidents', data);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/incidents`, data);
       const newIncident: Incident = response.data;
 
       if (onIncidentAdded) {

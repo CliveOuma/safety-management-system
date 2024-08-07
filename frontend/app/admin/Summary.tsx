@@ -27,11 +27,11 @@ const Summary: React.FC<SummaryProps> = () => {
     const fetchData = async () => {
       try {
         // Fetch total number of incidents
-        const incidentsResponse = await fetch('http://localhost:10000/api/incidentcount');
+        const incidentsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/incidentcount`);
         const incidentsData = await incidentsResponse.json();
 
         // Fetch total number of admins
-        const adminsResponse = await fetch('http://localhost:10000/api/admincount');
+        const adminsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admincount`);
         const adminsData = await adminsResponse.json();
 
         setSummaryData({
@@ -41,7 +41,7 @@ const Summary: React.FC<SummaryProps> = () => {
           },
           admins: {
             label: 'Total Admins',
-            digit: adminsData.count, // Assuming count is returned from the API
+            digit: adminsData.count, 
           },
         });
       } catch (error) {

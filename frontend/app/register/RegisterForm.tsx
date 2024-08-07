@@ -60,7 +60,7 @@ const Register: React.FC = () => {
     setIsLoading(true);
   
     try {
-      await axios.post("http://localhost:10000/api/register", data);
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, data);
       toast.success("Account created successfully!");
       router.push("/login");
     } catch (error: any) {
