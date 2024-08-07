@@ -10,7 +10,7 @@ This Safety Management System is designed specifically for a cylinder production
 
 - User Authentication and Authorization
 
-- User Registration and Login: Users can register and log in to the system.
+- User Registration and Login: Users can register and log in to the system successfully.
 
 - Role-Based Authentication: Role-based access control ensures that only admins can access the admin dashboard to manage incidents.
 
