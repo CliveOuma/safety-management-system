@@ -17,7 +17,11 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Middleware
 app.use((0, cookie_parser_1.default)());
-app.use((0, cors_1.default)({ origin: process.env.FRONTEND_URL || 'http://localhost:3000', credentials: true }));
+app.use((0, cors_1.default)({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true // Allows cookies to be sent with requests
+}));
 app.use(body_parser_1.default.json());
 // MongoDB Connection
 (0, db_1.default)();

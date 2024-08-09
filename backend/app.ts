@@ -15,7 +15,11 @@ const app = express();
 
 // Middleware
 app.use(cookieParser());
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000', credentials: true }));
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true // Allows cookies to be sent with requests
+}));
 app.use(bodyParser.json());
 
 // MongoDB Connection
@@ -25,6 +29,5 @@ connectToDatabase();
 app.use('/api', authRoutes);
 app.use('/api', incidentRoutes);
 app.use('/api', adminRoutes);
-
 
 export default app;
