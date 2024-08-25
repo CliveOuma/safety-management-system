@@ -7,6 +7,7 @@ import ActionBtn from "@/app/components/ActionBtn";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from 'axios';
+import { format } from 'date-fns';
 
 interface ManageIncidentProps {
   incidents: Incident[];
@@ -47,20 +48,21 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
   };
 
   const rows = incidents.map((incident) => ({
-    id: incident._id, // Unique ID for each incident
-    date: incident.date,
-    nearMiss: incident.nearMiss,
+    id: incident._id,
+    date: format(new Date(incident.date), 'yyyy-MM-dd'), // Format the date here
+    incidentType: incident.incidentType,
+    eventType: incident.eventType,
     reporter: incident.reporter,
     area: incident.area,
     name: incident.name,
-    incident: incident.incident,
+    incidentDescription: incident.incidentDescription,
   }));
 
   const columns: GridColDef[] = [
     { 
       field: 'id', 
       headerName: 'ID', 
-      width: 50, 
+      width: 60, 
       headerAlign: 'left', 
       headerClassName: 'header-cell', 
       cellClassName: 'data-cell'
@@ -74,9 +76,17 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
       cellClassName: 'data-cell'
     },
     { 
-      field: 'nearMiss', 
-      headerName: 'Near Miss', 
-      width: 120, 
+      field: 'incidentType', 
+      headerName: 'Incident Type', 
+      width: 100, 
+      headerAlign: 'left', 
+      headerClassName: 'header-cell', 
+      cellClassName: 'data-cell'
+    },
+    { 
+      field: 'eventType', 
+      headerName: 'Event Type', 
+      width: 100, 
       headerAlign: 'left', 
       headerClassName: 'header-cell', 
       cellClassName: 'data-cell'
@@ -84,7 +94,7 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
     { 
       field: 'reporter', 
       headerName: 'Reporter', 
-      width: 150, 
+      width: 130, 
       headerAlign: 'left', 
       headerClassName: 'header-cell', 
       cellClassName: 'data-cell'
@@ -100,15 +110,15 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
     { 
       field: 'name', 
       headerName: 'Name', 
-      width: 150, 
+      width: 130, 
       headerAlign: 'left', 
       headerClassName: 'header-cell', 
       cellClassName: 'data-cell'
     },
     {
-      field: 'incident', 
+      field: 'incidentDescription', 
       headerName: 'Incident Description', 
-      width: 200,
+      width: 170,
       renderCell: (params) => (
         <div className="truncate max-w-full text-gray-800">{params.value}</div>
       ),
@@ -146,7 +156,7 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
   ];
 
   return (
-    <div className="w-full mx-auto p-5 bg-white shadow-lg rounded-lg overflow-x-auto">
+    <div className="w-full mx-auto p-5 bg-white shadow-lg rounded-lg overflow-x-hidden">
       <div className="mb-6">
         <Heading title="Manage Incidents" center />
       </div>
@@ -158,11 +168,11 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 5,
+                  pageSize: 25,
                 },
               },
             }}
-            pageSizeOptions={[5]}
+            pageSizeOptions={[25]}
             checkboxSelection
             disableRowSelectionOnClick
             sx={{
@@ -170,10 +180,12 @@ const ManageIncident: React.FC<ManageIncidentProps> = ({ incidents, onDelete }) 
                 backgroundColor: "#f9fafb",
                 fontWeight: "bold",
               },
-              // Ensure the DataGrid takes the full width of the container
               "& .MuiDataGrid-viewport": {
-                width: 'max-content',
-              }
+                width: 'auto',
+              },
+              "& .data-cell": {
+                padding: '8px',
+              },
             }}
           />
         </div>

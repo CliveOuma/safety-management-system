@@ -6,37 +6,46 @@ import Button from "@/app/components/Button";
 import Heading from "@/app/components/Heading";
 import Input from "@/app/components/inputs/Input";
 import TextArea from "@/app/components/inputs/TextArea";
-import { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useState, useEffect } from 'react';
 import { Incident } from '@/types';
 
 interface IncidentFormFields {
-  date: string;
-  nearMiss: string;
+  date: Date | null;
+  incidentType: string;
+  eventType: string;
   reporter: string;
   area: string;
   name: string;
-  incident: string;
+  incidentDescription: string;
 }
 
 interface EditIncidentProps {
   incident: Incident;
   onIncidentUpdated: (incident: Incident) => void;
-  onClose: () => void;
 }
 
-const EditIncident = ({ incident, onIncidentUpdated }: EditIncidentProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<IncidentFormFields>({
+const EditIncident: React.FC<EditIncidentProps> = ({ incident, onIncidentUpdated }) => {
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<IncidentFormFields>({
     defaultValues: {
-      date: incident.date,
-      nearMiss: incident.nearMiss,
+      date: new Date(incident.date),
+      incidentType: incident.incidentType,
+      eventType: incident.eventType,
       reporter: incident.reporter,
       area: incident.area,
       name: incident.name,
-      incident: incident.incident,
+      incidentDescription: incident.incidentDescription,
     },
   });
+
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(incident.date));
+
+  useEffect(() => {
+    setValue('date', selectedDate); // Ensure the form reflects the selected date
+  }, [selectedDate, setValue]);
 
   const onSubmit: SubmitHandler<IncidentFormFields> = async (data) => {
     setIsLoading(true);
@@ -47,25 +56,29 @@ const EditIncident = ({ incident, onIncidentUpdated }: EditIncidentProps) => {
         throw new Error("No authentication token found");
       }
 
-      const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/incidents/${incident._id}`, data, {
+      // Format date to ISO string if required
+      const formattedData = {
+        ...data,
+        date: selectedDate ? selectedDate.toISOString() : '', // Convert date to ISO string
+      };
+      
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/incidents/${incident._id}`, formattedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.data) {
-        onIncidentUpdated(response.data); // Invoke callback
-        toast.success('Incident updated successfully'); // Show success message
+        onIncidentUpdated(response.data);
+        toast.success('Incident updated successfully');
         router.push('/admin/manage-incident');
       } else {
         toast.error('Failed to update incident');
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        // Handle specific 401 Unauthorized error
         toast.error('Authentication token is invalid or expired. Please log in again.');
       } else {
-        // General error handling
         console.error("Error updating incident:", error);
         toast.error('Failed to update incident');
       }
@@ -78,23 +91,62 @@ const EditIncident = ({ incident, onIncidentUpdated }: EditIncidentProps) => {
     <>
       <Heading title="Edit Incident" />
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="mb-4">
+          <label htmlFor="date" className="block text-md font-medium text-gray-400">Date</label>
+          <DatePicker
+            id="date"
+            selected={selectedDate}
+            onChange={(date: Date | null) => setSelectedDate(date)}
+            disabled={isLoading}
+            className={`w-full mt-3 p-4 peer pt-6 outline-none
+              bg-white font-light border-2 rounded-md transition 
+              disabled:opacity-70 disabled:cursor-not-allowed
+              ${errors.date ? 'border-rose-400' : 'border-slate-300'}
+              ${errors.date ? 'focus:border-rose-400' : 'focus:border-slate-300'}
+            `}
+            placeholderText="Select date"
+            dateFormat="yyyy-MM-dd"
+            required
+          />
+          {errors.date && (
+            <p className="text-red-500 text-sm mt-1">
+              {typeof errors.date?.message === 'string' ? errors.date.message : 'Invalid date'}
+            </p>
+          )}
+        </div>
         <Input
-          id="date"
-          label="Date"
-          type="date"
+          id="incidentType"
+          label="Incident Type"
           disabled={isLoading}
           register={register}
           errors={errors}
           required
         />
-        <Input
-          id="nearMiss"
-          label="Near Miss"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
+        <div className="mb-4">
+          <label htmlFor="eventType" className="block text-md font-medium text-gray-400">Event Type</label>
+          <select
+            id="eventType"
+            {...register('eventType', { required: true })}
+            disabled={isLoading}
+            className={`w-full mt-3 p-4 peer pt-6 outline-none
+              bg-white font-light border-2 rounded-md transition 
+              disabled:opacity-70 disabled:cursor-not-allowed
+              ${errors.eventType ? 'border-rose-400' : 'border-slate-300'}
+              ${errors.eventType ? 'focus:border-rose-400' : 'focus:border-slate-300'}
+            `}
+          >
+            <option value="">Choose an option</option>
+            <option value="Near Miss">Near Miss</option>
+            <option value="Accident">Accident</option>
+            <option value="Accident">Incident</option>
+          </select>
+          {errors.incidentType && (
+            <p className="text-red-500 text-sm mt-1">
+              {typeof errors.incidentType?.message === 'string' ? errors.incidentType.message : 'This field is required'}
+            </p>
+          )}
+        </div>
+
         <Input
           id="reporter"
           label="Reporter"
@@ -120,7 +172,7 @@ const EditIncident = ({ incident, onIncidentUpdated }: EditIncidentProps) => {
           required
         />
         <TextArea
-          id="incident"
+          id="incidentDescription"
           label="Incident Description"
           disabled={isLoading}
           register={register}

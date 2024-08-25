@@ -57,7 +57,6 @@ const EditIncidentPage = () => {
       <EditIncident 
         incident={incident} 
         onIncidentUpdated={handleIncidentUpdated} 
-        onClose={handleClose} 
       />
     </FormWrap>
     </Container>

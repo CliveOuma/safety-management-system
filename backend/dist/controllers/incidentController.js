@@ -16,21 +16,25 @@ exports.getIncidentCount = exports.getIncidentById = exports.getIncidents = expo
 const incident_1 = __importDefault(require("../models/incident"));
 const createIncident = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const incident = new incident_1.default(req.body);
-        yield incident.save();
-        res.status(201).send(incident);
+        const { date, incidentType, eventType, reporter, area, name, incidentDescription } = req.body;
+        if (!date || !incidentType || !eventType || !reporter || !area || !name || !incidentDescription) {
+            throw new Error('All fields are required');
+        }
+        const newIncident = new incident_1.default({ date, incidentType, eventType, reporter, area, name, incidentDescription });
+        yield newIncident.save();
+        res.status(201).send(newIncident);
     }
     catch (error) {
-        console.error('Error saving incident:', error); // Detailed logging
-        res.status(400).send({ message: 'Error saving incident' });
+        console.error('Error saving incident:', error);
+        res.status(400).send({ message: 'Incident not saved' });
     }
 });
 exports.createIncident = createIncident;
 const updateIncident = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const { date, nearMiss, reporter, area, name, incident } = req.body;
-        const updatedIncident = yield incident_1.default.findByIdAndUpdate(id, { date, nearMiss, reporter, area, name, incident }, { new: true });
+        const { date, incidentType, eventType, reporter, area, name, incidentDescription } = req.body;
+        const updatedIncident = yield incident_1.default.findByIdAndUpdate(id, { date, incidentType, eventType, reporter, area, name, incidentDescription }, { new: true });
         if (!updatedIncident) {
             return res.status(404).send({ message: 'Incident not found' });
         }

@@ -3,21 +3,24 @@ import Incident from '../models/incident';
 
 export const createIncident = async (req: Request, res: Response) => {
   try {
-    const incident = new Incident(req.body);
-    await incident.save();
-    res.status(201).send(incident);
+    const { date, incidentType, eventType, reporter, area, name, incidentDescription } = req.body;
+    if (!date || !incidentType || !eventType || !reporter || !area || !name || !incidentDescription) {
+      throw new Error('All fields are required');
+    }
+    const newIncident = new Incident({ date, incidentType, eventType, reporter, area, name, incidentDescription });
+    await newIncident.save();
+    res.status(201).send(newIncident);
   } catch (error) {
-    console.error('Error saving incident:', error); // Detailed logging
-    res.status(400).send({ message: 'Error saving incident' });
+    console.error('Error saving incident:', error);
+    res.status(400).send({ message: 'Incident not saved' });
   }
 };
 
 export const updateIncident = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { date,nearMiss,reporter,area,name,incident } = req.body;
-    const updatedIncident = await Incident.findByIdAndUpdate
-    (id, {date,nearMiss,reporter,area,name,incident }, { new: true });
+    const { date, incidentType, eventType, reporter, area, name, incidentDescription } = req.body;
+    const updatedIncident = await Incident.findByIdAndUpdate(id, { date, incidentType, eventType, reporter, area, name, incidentDescription }, { new: true });
     if (!updatedIncident) {
       return res.status(404).send({ message: 'Incident not found' });
     }

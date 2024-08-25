@@ -10,15 +10,19 @@ import Heading from "../components/Heading";
 import Input from "../components/inputs/Input";
 import Button from "../components/Button";
 import Link from "next/link";
+import jwt from "jsonwebtoken";
+import { useUserContext } from "../context/userContext";
 
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
-const LoginForm = () => {
+const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { setRole, setIsExpired } = useUserContext();
+
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>();
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
@@ -30,6 +34,11 @@ const LoginForm = () => {
 
       // Store the token in localStorage
       localStorage.setItem('token', token);
+
+      // Decode the token and update the context
+      const decoded = jwt.decode(token) as { role: string; exp: number };
+      setRole(decoded.role);
+      setIsExpired(decoded.exp < Date.now() / 1000);
 
       toast.success('Logged In Successfully');
       router.push('/');
@@ -57,4 +66,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Login;
