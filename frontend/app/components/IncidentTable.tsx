@@ -13,7 +13,7 @@ const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
         <thead className="bg-blue-800 text-white">
           <tr>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Date</th>
-            <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Incident Type</th>
+            <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6 max-w-xs truncate">Incident Type</th>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Event Type</th>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Reporter</th>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Area</th>
@@ -29,7 +29,7 @@ const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
               <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">
                 {format(new Date(incident.date), 'yyyy-MM-dd')}
               </td>
-              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.incidentType}</td>
+              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">{incident.incidentType}</td>
               <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.eventType}</td>
               <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.reporter}</td>
               <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.area}</td>
