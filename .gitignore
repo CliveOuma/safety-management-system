@@ -7,3 +7,5 @@ dist/
 # Environment variable files
 .env
 .env.local
+.env.development
+.env.production

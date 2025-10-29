@@ -13,12 +13,12 @@ const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
         <thead className="bg-blue-800 text-white">
           <tr>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Date</th>
-            <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6 max-w-xs truncate">Incident Type</th>
+            <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Incident Type</th>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Event Type</th>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Reporter</th>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Area</th>
             <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">Name</th>
-            <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6 max-w-xs truncate">
+            <th className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 w-1/6">
               Incident Description
             </th>
           </tr>
@@ -26,15 +26,15 @@ const IncidentTable: React.FC<IncidentTableProps> = ({ incidents }) => {
         <tbody className="text-gray-700">
           {incidents.map((incident) => (
             <tr key={incident._id} className="hover:bg-gray-50 transition-colors border-b border-gray-300">
-              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">
+              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">
                 {format(new Date(incident.date), 'yyyy-MM-dd')}
               </td>
               <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">{incident.incidentType}</td>
-              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.eventType}</td>
-              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.reporter}</td>
-              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.area}</td>
-              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 truncate">{incident.name}</td>
-              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300  max-w-xs">
+              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">{incident.eventType}</td>
+              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">{incident.reporter}</td>
+              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">{incident.area}</td>
+              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">{incident.name}</td>
+              <td className="py-2 px-2 sm:px-4 text-left border-r border-gray-300 max-w-xs">
                 {incident.incidentDescription}
               </td>
             </tr>
